@@ -9,4 +9,7 @@ This project is an attempt to create template for C/C++ projects using modern cm
 ------
 
 # TODO
-------
+* test if works with 
+'''
+set(AUTORCC_OPTIONS "Resources.qrc")
+'''

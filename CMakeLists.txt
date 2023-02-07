@@ -43,10 +43,35 @@ endif()
 
 
 # ===========================
+# Project dependencies
+# ===========================
+find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+
+# find_package(package_name package_version REQUIRED package_type [other_options])
+#target_link_libraries(
+#  ${PROJECT_NAME}
+#  PUBLIC
+#    dependency1 ...
+#  PRIVATE
+#    dependency2 ...
+#    PROJECT_OPTIONS
+#    PROJECT_WARNINGS
+#)
+
+#if(BUILD_EXECUTABLE AND ENABLE_UNIT_TESTING)
+#  target_link_libraries(
+#    ${PROJECT_NAME}_LIB
+#    PUBLIC
+#      dependency1 ...
+#  )
+#endif()
+
+# ===========================
 # adding exec/lib
 # ===========================
 if(BUILD_EXECUTABLE)
-    add_executable(${PROJECT_NAME} ${EXE_SOURCES})
+    qt_add_resources(QT_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
+    add_executable(${PROJECT_NAME} ${EXE_SOURCES} ${QT_RESOURCES})
 
     message(STATUS "Found the following sources:")
     foreach(SOURCE IN LISTS EXE_SOURCES)
@@ -94,6 +119,12 @@ set_target_properties(
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}"
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}"
+
+  MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+  MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+  MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+  MACOSX_BUNDLE TRUE
+  WIN32_EXECUTABLE TRUE
 )
 
 if(BUILD_EXECUTABLE AND ENABLE_UNIT_TESTING)
@@ -116,6 +147,8 @@ if(BUILD_HEADERS_ONLY)
     target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 else()
     target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+    target_compile_definitions(${PROJECT_NAME}
+    PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
     if(BUILD_EXECUTABLE AND ENABLE_UNIT_TESTING)
         target_compile_features(${PROJECT_NAME}_LIB PUBLIC cxx_std_17)
@@ -124,29 +157,6 @@ endif()
 set_project_warnings(${PROJECT_NAME})
 
 message(STATUS "Applied compiler warnings. Using standard C++${CMAKE_CXX_STANDARD}.\n")
-
-# ===========================
-# Project dependencies
-# ===========================
-
-# find_package(package_name package_version REQUIRED package_type [other_options])
-#target_link_libraries(
-#  ${PROJECT_NAME}
-#  PUBLIC
-#    dependency1 ...
-#  PRIVATE
-#    dependency2 ...
-#    PROJECT_OPTIONS
-#    PROJECT_WARNINGS
-#)
-
-#if(BUILD_EXECUTABLE AND ENABLE_UNIT_TESTING)
-#  target_link_libraries(
-#    ${PROJECT_NAME}_LIB
-#    PUBLIC
-#      dependency1 ...
-#  )
-#endif()
 
 # For Windows, it is necessary to link with the MultiThreaded library.
 # On Linux and Mac this variable is ignored. 
@@ -175,6 +185,10 @@ else()
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE 
+        Qt6::Quick
     )
 
     if(BUILD_EXECUTABLE AND ENABLE_UNIT_TESTING)
