@@ -1,9 +1,9 @@
 set(HEADERS
-    include/tmp/tmp.hpp
+    # include/.hpp
 )
 
 set(SOURCES
-    src/tmp/tmp.cpp
+    # src/.cpp
 )
 
 set(EXE_SOURCES
@@ -14,5 +14,4 @@ set(EXE_SOURCES
 # inside test directory
 set(TEST_SOURCES
     mainTest.cpp
-    tmpTest.cpp
 )
