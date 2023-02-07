@@ -11,6 +11,9 @@ set(EXE_SOURCES
     ${SOURCES}
 )
 
+set(QML_SOURCES
+    resources/qml/main.qml)
+
 # inside test directory
 set(TEST_SOURCES
     mainTest.cpp
