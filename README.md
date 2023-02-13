@@ -13,3 +13,4 @@ This project is an attempt to create template for C/C++ projects using modern cm
 '''
 set(AUTORCC_OPTIONS "Resources.qrc")
 '''
+* make it installable

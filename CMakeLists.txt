@@ -46,6 +46,7 @@ endif()
 # Project dependencies
 # ===========================
 find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+qt_standard_project_setup()
 
 # find_package(package_name package_version REQUIRED package_type [other_options])
 #target_link_libraries(
@@ -71,7 +72,7 @@ find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
 # ===========================
 if(BUILD_EXECUTABLE)
     qt_add_resources(QT_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
-    add_executable(${PROJECT_NAME} ${EXE_SOURCES} ${QT_RESOURCES})
+    qt_add_executable(${PROJECT_NAME} ${EXE_SOURCES} ${QT_RESOURCES})
 
     message(STATUS "Found the following sources:")
     foreach(SOURCE IN LISTS EXE_SOURCES)
@@ -88,7 +89,7 @@ if(BUILD_EXECUTABLE)
     endif()
 
 elseif(BUILD_HEADERS_ONLY)
-    add_library(${PROJECT_NAME} INTERFACE)
+    qt_add_library(${PROJECT_NAME} INTERFACE)
 
     message(STATUS "Found the following headers:")
     foreach(HEADER IN LIST HEADERS)
@@ -96,7 +97,7 @@ elseif(BUILD_HEADERS_ONLY)
     endforeach()
 
 else()
-    add_library(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+    qt_add_library(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 
     message(STATUS "Found the following sources:")
     foreach(SOURCE IN LISTS SOURCES)
@@ -209,13 +210,13 @@ message(STATUS "Finished setting up include directories.\n")
 # Provide alias to library
 # ===========================
 
-if(BUILD_EXECUTABLE)
-  add_executable(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-else()
-  add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-endif()
+# if(BUILD_EXECUTABLE)
+#     qt_add_executable(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+# else()
+#     qt_add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+# endif()
 
-message(STATUS "Project is now aliased as ${PROJECT_NAME}::${PROJECT_NAME}.\n")
+# message(STATUS "Project is now aliased as ${PROJECT_NAME}::${PROJECT_NAME}.\n")
 
 # ===========================
 # Format the project using the `clang-format` target 
