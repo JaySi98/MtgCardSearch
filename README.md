@@ -21,10 +21,3 @@ For other version I recommend to permamently export path to these libraries:
 1. sudo nano /etc/ld.so.conf.d/x86_64-linux-gnu.conf 
 2. add path to qt6 libraries, eg. /path/to/Qt/<version>/<compiler>/lib
 3. sudo ldconfig
-
-# TODO
-* test if works with 
-'''
-set(AUTORCC_OPTIONS "Resources.qrc")
-'''
-* make it installable
